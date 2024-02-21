@@ -1,8 +1,8 @@
 <?php
-require_once '../vendor/autoload.php';
+// require_once '../vendor/autoload.php';
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/../');
-$dotenv->load();
+// $dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/../');
+// $dotenv->load();
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -37,7 +37,7 @@ if (isset($_SESSION['user'])) {
         <div class="register-form_container">
             <h1>Register</h1>
 
-            <form action="../src/Controller/AuthenticationController.php" method="post" class="register-form" name="register-form">
+            <form action="login" method="post" class="register-form" name="register-form">
                 <input type="hidden" name="form-name" value="register-form">
 
                 <label for="fullname">Fullname</label>
@@ -66,7 +66,7 @@ if (isset($_SESSION['user'])) {
             <?php } ?>
 
             <button class="login-button">
-                <a href="login.php">Login</a>
+                <a href="login">Login</a>
             </button>
         </div>
     </body>

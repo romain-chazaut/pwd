@@ -1,8 +1,8 @@
 <?php
 // require_once '../vendor/autoload.php';
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/../');
-$dotenv->load();
+// $dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/../');
+// $dotenv->load();
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -30,7 +30,7 @@ if (isset($_SESSION['user'])) {
         <link rel="icon" href="../public/assets/img/favicon.ico" type="image/x-icon">
         <title>RAM SHOP - Login</title>
 
-        <link rel="stylesheet" href="../public/assets/css/style.css">
+        <link rel="stylesheet" href="../../public/assets/css/style.css">
 
         <script defer src="../public/assets/js/togglePassword.js"></script>
     </head>
@@ -38,7 +38,7 @@ if (isset($_SESSION['user'])) {
     <body>
         <h1>Login</h1>
 
-        <form action="../src/Controller/AuthenticationController.php" method="post" name="login-form">
+        <form action="shop.php" method="post" name="login-form">
             <input type="hidden" name="form-name" value="login-form">
 
             <label for="email">Email</label>
@@ -58,7 +58,7 @@ if (isset($_SESSION['user'])) {
         <?php } ?>
 
         <button class="register-button">
-            <a href="register.php">Register</a>
+            <a href="register">Register</a>
         </button>
     </body>
 </html>
