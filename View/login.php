@@ -1,24 +1,33 @@
 <?php
-// require_once '../vendor/autoload.php';
+ require_once '../vendor/autoload.php';
 
-// $dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/../');
-// $dotenv->load();
+ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/../');
+ $dotenv->load();
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-/**
- * Redirige l'utilisateur vers la page d'accueil s'il est déjà connecté
- */
-if (isset($_SESSION['user'])) {
-    $user = $_SESSION['user'];
-    if ($user->getState() == 1) {
-        header('Location: ../index.php');
-        exit();
-    }
-
+///**
+// * Redirige l'utilisateur vers la page d'accueil s'il est déjà connecté
+// */
+//if (isset($_SESSION['user'])) {
+//    $user = $_SESSION['user'];
+//    if ($user->getState() == 1) {
+//        header('Location: ../index.php');
+//        exit();
+//    }
+//
+//}
+if (isset($_SESSION['test'])) {
+    $fullname = $_SESSION['test']['fullname'];
+    $email = $_SESSION['test']['email'];
+    $password = $_SESSION['test']['password'];
+    $confirmPassword = $_SESSION['test']['confirmPassword'];
+    var_dump($fullname, $email, $password, $confirmPassword);
+    unset($_SESSION['test']);
 }
+
 ?>
 
 <!doctype html>
