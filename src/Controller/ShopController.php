@@ -70,10 +70,10 @@ class ShopController
      *
      * @param int $id_product
      * @param string $product_type
-     * @return bool|Electronic|Clothing
+     * @return string|Electronic|Clothing
      * @throws Exception
      */
-    public function showProduct(int $id_product, string $product_type): bool|Electronic|Clothing
+    public function showProduct(int $id_product, string $product_type): string|Electronic|Clothing
     {
         if (isset($_SESSION['user'])) {
             $user = $_SESSION['user'];
@@ -84,7 +84,7 @@ class ShopController
                     if ($result !== false) {
                         return $result;
                     } else {
-                        return false;
+                        return 'Le produit n\'existe pas';
                     }
                 } elseif ($product_type == 'clothing') {
                     $clothing = new Clothing();
@@ -92,20 +92,16 @@ class ShopController
                     if ($result !== false) {
                         return $result;
                     } else {
-                        return false;
+                        return 'Le produit n\'existe pas';
                     }
                 } else {
-                    return false;
+                    return 'Le produit n\'existe pas';
                 }
             } else {
-                $_SESSION['error'] = "Connectez-vous pour accéder au profil";
-                header('Location: ../../View/login.php');
-                return false;
+                return "Connectez-vous pour afficher les détails du produit";
             }
         }else {
-            $_SESSION['error'] = "Connectez-vous pour accéder au profil";
-            header('Location: ../../View/login.php');
-            return false;
+            return "Connectez-vous pour afficher les détails du produit";
         }
     }
 }

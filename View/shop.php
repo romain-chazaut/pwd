@@ -10,18 +10,6 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-/**
- * Redirige l'utilisateur vers la page de connexion s'il n'est pas connecté
- */
-if (isset($_SESSION['user'])) {
-    $user = $_SESSION['user'];
-    if ($user->getState() == 0 || $user->getState() == '') {
-        $_SESSION['error'] = "Connectez-vous pour accéder au profil";
-        header('Location: login.php');
-        exit();
-    }
-}
-
 $productModel = new Product(); // Assurez-vous que cette classe existe
 $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 
@@ -52,9 +40,24 @@ $totalPages = ceil($totalProducts / 5);
         <button class="home-button">
             <a href="">Cart</a>
         </button>
-        <button class="home-button">
-            <a href="/pwd/logout">Logout</a>
-        </button>
+
+        <?php if (isset($_SESSION['user'])) {
+            $user = $_SESSION['user'];
+            if ($user->getState() == 0 || $user->getState() == '') { ?>
+                <button class="home-button">
+                    <a href="/pwd/login">Login</a>
+                </button>
+            <?php }
+        } ?>
+        <?php if (isset($_SESSION['user'])) {
+            $user = $_SESSION['user'];
+            if ($user->getState() == 1) { ?>
+                <button class="home-button">
+                    <a href="/pwd/logout">Logout</a>
+                </button>
+            <?php }
+        } ?>
+
         <table>
             <thead>
                 <tr>
@@ -130,16 +133,18 @@ $totalPages = ceil($totalProducts / 5);
         <div>
             <?php if (isset($_SESSION['product'])) {
                 $product = $_SESSION['product'];
-                echo "<h2>Produit</h2>";
-                echo "<p>Id: " . $product->getId() . "</p>";
-                echo "<p>Nom: " . $product->getName() . "</p>";
-                echo "<p>Photos: " . $product->getPhotos() . "</p>";
-                echo "<p>Prix: " . $product->getPrice() . "</p>";
-                echo "<p>Description: " . $product->getDescription() . "</p>";
-                echo "<p>Quantité: " . $product->getQuantity() . "</p>";
-                echo "<p>Catégorie: " . $product->getCategory()->getName() . "</p>";
-                echo "<p>Date de création: " . $product->getCreatedAt() . "</p>";
-                echo "<p>Date de mise à jour: " . $product->getUpdatedAt() . "</p>";
+                if (gettype($product) === 'object') {
+                    echo "<h2>Produit</h2>";
+                    echo "<p>Id: " . $product->getId() . "</p>";
+                    echo "<p>Nom: " . $product->getName() . "</p>";
+                    echo "<p>Photos: " . $product->getPhotos() . "</p>";
+                    echo "<p>Prix: " . $product->getPrice() . "</p>";
+                    echo "<p>Description: " . $product->getDescription() . "</p>";
+                    echo "<p>Quantité: " . $product->getQuantity() . "</p>";
+                    echo "<p>Catégorie: " . $product->getCategory()->getName() . "</p>";
+                    echo "<p>Date de création: " . $product->getCreatedAt() . "</p>";
+                    echo "<p>Date de mise à jour: " . $product->getUpdatedAt() . "</p>";
+                }
                 unset($_SESSION['product']);
             } ?>
         </div>

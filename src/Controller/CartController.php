@@ -43,9 +43,7 @@ class CartController
         $user_id = $user->getId();
 
         if (!$user->getState()) {
-            $_SESSION['error'] = "Connectez-vous pour ajouter un produit au panier !";
-            header('Location: ../../View/login.php');
-            exit();
+            return false;
         }
 
         $cart = new Cart();

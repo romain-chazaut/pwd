@@ -167,10 +167,10 @@ try {
                 $product_type = htmlspecialchars($_POST['product_type']);
 
                 $product = $shop->showProduct($id_product, $product_type);
-                if ($product !== false) {
+                if (gettype($product) !== 'string') {
                     $_SESSION['product'] = $product;
                 } else {
-                    $_SESSION['error'] = 'Le produit n\'existe pas';
+                    $_SESSION['error'] = $product;
                 }
                 header('Location: View/shop.php');
             }
@@ -195,7 +195,14 @@ try {
                 if ($cart->addProductToCart($product_id)) {
                     $_SESSION['success'] = "Produit ajouté au panier avec succès";
                 } else {
-                    $_SESSION['error'] = "Erreur lors de l'ajout du produit au panier";
+                    if (isset($_SESSION['user'])) {
+                        $user = $_SESSION['user'];
+                        if ($user->getState() == 1) {
+                            $_SESSION['error'] = "Erreur lors de l'ajout du produit au panier";
+                        } else {
+                            $_SESSION['error'] = "Connectez-vous pour ajouter un produit au panier !";
+                        }
+                    }
                 }
                 header('Location: View/shop.php');
             }
