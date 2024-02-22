@@ -1,0 +1,8 @@
+Si connecté en admin :
+    - nouveau bouton pour aller sur une page d'admin
+    - sur shop page, bouton pour ajouter/supprimer/modifier un produit
+
+Page admin :
+    - liste des users
+    - bouton pour supprimer un user
+    - bouton pour modifier un user
