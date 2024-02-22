@@ -79,7 +79,6 @@ try {
         /**
          * Vérifie s'il y a une requête POST
          * Instancie un objet AuthenticationController
-         * Appelle la méthode nécessaire en fonction de la valeur de $_POST['form-name']
          */
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_POST['form-name']) && $_POST['form-name'] === 'login-form') {
@@ -105,7 +104,6 @@ try {
         /**
          * Vérifie s'il y a une requête POST
          * Instancie un objet AuthenticationController
-         * Appelle la méthode nécessaire en fonction de la valeur de $_POST['form-name']
          */
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_POST['form-name']) && $_POST['form-name'] === 'register-form') {
@@ -133,7 +131,6 @@ try {
         /**
          * Vérifie s'il y a une requête POST
          * Instancie un objet AuthenticationController
-         * Appelle la méthode nécessaire en fonction de la valeur de $_POST['form-name']
          */
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_POST['form-name']) && $_POST['form-name'] === 'profile-form') {
@@ -158,7 +155,6 @@ try {
         /**
          * Vérifie s'il y a une requête POST
          * Instancie un objet ShopController
-         * Appelle la méthode nécessaire en fonction de la valeur de $_POST['form-name']
          */
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_POST['form-name']) && $_POST['form-name'] === 'show-product-form') {
@@ -185,7 +181,6 @@ try {
         /**
          * Vérifie s'il y a une requête POST
          * Instancie un objet CartController
-         * Appelle la méthode nécessaire en fonction de la valeur de $_POST['form-name']
          */
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_POST['form-name']) && $_POST['form-name'] === 'add-cart-form') {
