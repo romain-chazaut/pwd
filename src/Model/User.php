@@ -180,12 +180,11 @@ class User
     {
         $pdo = new \PDO('mysql:host=' . $_ENV['DB_HOST'] . ';dbname=' . $_ENV['DB_NAME'] . ';port=' . $_ENV['DB_PORT'], $_ENV['DB_USER'], $_ENV['DB_PASSWORD']);
 
-        $stmt = $pdo->prepare("UPDATE user SET fullname = :fullname, email = :email, password = :password, role = :role WHERE email = :email");
+        $stmt = $pdo->prepare("UPDATE user SET fullname = :fullname, email = :email, password = :password WHERE email = :email");
 
         $stmt->bindValue(':fullname', $this->getFullname());
         $stmt->bindValue(':email', $this->getEmail());
         $stmt->bindValue(':password', $this->getPassword());
-        $stmt->bindValue(':role', json_encode($this->setRole(['ROLE_USER'])));
 
         $stmt->execute();
 

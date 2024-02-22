@@ -18,64 +18,39 @@ $router = new AltoRouter();
 $router->setBasePath('/pwd');
 
 // Routes en GET
-try {
-    $router->map('GET', '/', function () {
+$router->map('GET', '/', function () {
         header('Location: View/shop.php');
         exit();
     });
-} catch (Exception $e) {
-    echo $e->getMessage();
-}
 
-try {
-    $router->map('GET', '/login', function () {
+$router->map('GET', '/login', function () {
         header('Location: View/login.php');
         exit();
     });
-} catch (Exception $e) {
-    echo $e->getMessage();
-}
 
-try {
-    $router->map('GET', '/register', function () {
+$router->map('GET', '/register', function () {
         header('Location: View/register.php');
         exit();
     });
-} catch (Exception $e) {
-    echo $e->getMessage();
-}
 
-try {
-    $router->map('GET', '/logout', function () {
+$router->map('GET', '/logout', function () {
         header('Location: View/logout.php');
         exit();
     });
-} catch (Exception $e) {
-    echo $e->getMessage();
-}
 
-try {
-    $router->map('GET', '/shop', function () {
+$router->map('GET', '/shop', function () {
         header('Location: View/shop.php');
         exit();
     });
-} catch (Exception $e) {
-    echo $e->getMessage();
-}
 
-try {
-    $router->map('GET', '/profile', function () {
+$router->map('GET', '/profile', function () {
         header('Location: View/profile.php');
         exit();
     });
-} catch (Exception $e) {
-    echo $e->getMessage();
-}
 
 
 // Routes en POST
-try {
-    $router->map('POST', '/login', function () {
+$router->map('POST', '/login', function () {
         /**
          * Vérifie s'il y a une requête POST
          * Instancie un objet AuthenticationController
@@ -95,12 +70,8 @@ try {
             }
         }
     });
-} catch (Exception $e) {
-    echo $e->getMessage();
-}
 
-try {
-    $router->map('POST', '/register', function () {
+$router->map('POST', '/register', function () {
         /**
          * Vérifie s'il y a une requête POST
          * Instancie un objet AuthenticationController
@@ -122,12 +93,8 @@ try {
             }
         }
     });
-} catch (Exception $e) {
-    echo $e->getMessage();
-}
 
-try {
-    $router->map('POST', '/profile', function () {
+$router->map('POST', '/profile', function () {
         /**
          * Vérifie s'il y a une requête POST
          * Instancie un objet AuthenticationController
@@ -146,12 +113,8 @@ try {
             }
         }
     });
-} catch (Exception $e) {
-    echo $e->getMessage();
-}
 
-try {
-    $router->map('POST', '/shop', function () {
+$router->map('POST', '/shop', function () {
         /**
          * Vérifie s'il y a une requête POST
          * Instancie un objet ShopController
@@ -172,12 +135,8 @@ try {
             }
         }
     });
-} catch (Exception $e) {
-    echo $e->getMessage();
-}
 
-try {
-    $router->map('POST', '/cart', function () {
+$router->map('POST', '/cart', function () {
         /**
          * Vérifie s'il y a une requête POST
          * Instancie un objet CartController
@@ -203,9 +162,6 @@ try {
             }
         }
     });
-} catch (Exception $e) {
-    echo $e->getMessage();
-}
 
 // Correspondance et exécution de la route
 $match = $router->match();

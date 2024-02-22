@@ -18,6 +18,11 @@ $totalProducts = $productModel->count(); // Méthode pour compter le total des p
 
 $totalPages = ceil($totalProducts / 5);
 
+if (isset($_SESSION['user'])) {
+    if ($_SESSION['user']->getRole()[0] === 'ROLE_ADMIN') {
+        echo 'admin connecté';
+    }
+}
 ?>
 
 <!doctype html>
