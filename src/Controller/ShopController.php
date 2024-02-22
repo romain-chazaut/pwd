@@ -7,6 +7,7 @@ use App\Model\Clothing;
 use App\Model\Electronic;
 use App\Model\Product;
 use Dotenv\Dotenv;
+use Exception;
 
 if (!isset($_SESSION)) {
     session_start();
@@ -69,9 +70,10 @@ class ShopController
      *
      * @param int $id_product
      * @param string $product_type
-     * @return mixed
+     * @return bool|Electronic|Clothing
+     * @throws Exception
      */
-    public function showProduct(int $id_product, string $product_type)
+    public function showProduct(int $id_product, string $product_type): bool|Electronic|Clothing
     {
         if (isset($_SESSION['user'])) {
             $user = $_SESSION['user'];
@@ -105,27 +107,5 @@ class ShopController
             header('Location: ../../View/login.php');
             return false;
         }
-    }
-}
-
-/**
- * Vérifie s'il y a une requête POST
- * Instancie un objet ShopController
- * Appelle la méthode nécessaire en fonction de la valeur de $_POST['form-name']
- */
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $shop = new ShopController(new Product());
-
-    if (isset($_POST['form-name']) && $_POST['form-name'] === 'show-product-form') {
-        $id_product = htmlspecialchars($_POST['id_product']);
-        $product_type = htmlspecialchars($_POST['product_type']);
-
-        $product = $shop->showProduct($id_product, $product_type);
-        if ($product !== false) {
-            $_SESSION['product'] = $product;
-        } else {
-            $_SESSION['error'] = 'Le produit n\'existe pas';
-        }
-        header('Location: ../../View/shop.php');
     }
 }

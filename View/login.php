@@ -8,26 +8,17 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-///**
-// * Redirige l'utilisateur vers la page d'accueil s'il est déjà connecté
-// */
-//if (isset($_SESSION['user'])) {
-//    $user = $_SESSION['user'];
-//    if ($user->getState() == 1) {
-//        header('Location: ../index.php');
-//        exit();
-//    }
-//
-//}
-if (isset($_SESSION['test'])) {
-    $fullname = $_SESSION['test']['fullname'];
-    $email = $_SESSION['test']['email'];
-    $password = $_SESSION['test']['password'];
-    $confirmPassword = $_SESSION['test']['confirmPassword'];
-    var_dump($fullname, $email, $password, $confirmPassword);
-    unset($_SESSION['test']);
-}
+/**
+ * Redirige l'utilisateur vers la page d'accueil s'il est déjà connecté
+ */
+if (isset($_SESSION['user'])) {
+    $user = $_SESSION['user'];
+    if ($user->getState() == 1) {
+        header('Location: ../index.php');
+        exit();
+    }
 
+}
 ?>
 
 <!doctype html>
@@ -39,7 +30,7 @@ if (isset($_SESSION['test'])) {
         <link rel="icon" href="../public/assets/img/favicon.ico" type="image/x-icon">
         <title>RAM SHOP - Login</title>
 
-        <link rel="stylesheet" href="../../public/assets/css/style.css">
+        <link rel="stylesheet" href="../public/assets/css/style.css">
 
         <script defer src="../public/assets/js/togglePassword.js"></script>
     </head>
@@ -47,7 +38,7 @@ if (isset($_SESSION['test'])) {
     <body>
         <h1>Login</h1>
 
-        <form action="shop.php" method="post" name="login-form">
+        <form action="/pwd/login" method="post" name="login-form">
             <input type="hidden" name="form-name" value="login-form">
 
             <label for="email">Email</label>
@@ -67,7 +58,7 @@ if (isset($_SESSION['test'])) {
         <?php } ?>
 
         <button class="register-button">
-            <a href="register">Register</a>
+            <a href="/pwd/register">Register</a>
         </button>
     </body>
 </html>

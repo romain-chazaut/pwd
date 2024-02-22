@@ -8,31 +8,15 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-///**
-// * Redirige l'utilisateur vers la page d'accueil s'il est déjà connecté
-// */
-//if (isset($_SESSION['user'])) {
-//    $user = $_SESSION['user'];
-//    if ($user->getState() == 1) {
-//        header('Location: ../index.php');
-//        exit();
-//    }
-//}
-
 /**
- * Vérifie si le formulaire a été soumis
+ * Redirige l'utilisateur vers la page d'accueil s'il est déjà connecté
  */
-if (isset($_POST['form-name']) && $_POST['form-name'] === 'register-form') {
-    $errors = [];
-
-    $fullname = filter_input(INPUT_POST, 'fullname', FILTER_SANITIZE_STRING);
-    $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-    $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
-    $confirmPassword = filter_input(INPUT_POST, 'confirm-password', FILTER_SANITIZE_STRING);
-
-//    header('Location: ../register/'. $fullname . '/' . $email . '/' . $password . '/' . $confirmPassword);
-    header('Location: /pwd/register/'. $fullname . '/' . $email . '/' . $password . '/' . $confirmPassword);
-    exit();
+if (isset($_SESSION['user'])) {
+    $user = $_SESSION['user'];
+    if ($user->getState() == 1) {
+        header('Location: ../index.php');
+        exit();
+    }
 }
 ?>
 
@@ -53,7 +37,7 @@ if (isset($_POST['form-name']) && $_POST['form-name'] === 'register-form') {
         <div class="register-form_container">
             <h1>Register</h1>
 
-            <form action="" method="post" class="register-form" name="register-form">
+            <form action="/pwd/register" method="post" class="register-form" name="register-form">
                 <input type="hidden" name="form-name" value="register-form">
 
                 <label for="fullname">Fullname</label>
@@ -82,7 +66,7 @@ if (isset($_POST['form-name']) && $_POST['form-name'] === 'register-form') {
             <?php } ?>
 
             <button class="login-button">
-                <a href="login">Login</a>
+                <a href="/pwd/login">Login</a>
             </button>
         </div>
     </body>

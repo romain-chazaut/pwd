@@ -1,7 +1,8 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 
-// Initialisation de Dotenv pour charger les variables d'environnement
+use App\Model\Product;
+
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/../');
 $dotenv->load();
 
@@ -9,6 +10,9 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+/**
+ * Redirige l'utilisateur vers la page de connexion s'il n'est pas connecté
+ */
 if (isset($_SESSION['user'])) {
     $user = $_SESSION['user'];
     if ($user->getState() == 0 || $user->getState() == '') {
@@ -18,9 +22,7 @@ if (isset($_SESSION['user'])) {
     }
 }
 
-// Redirige l'utilisateur vers la page de connexion s'il n'est pas connecté
-
-$productModel = new \App\Model\Product(); // Assurez-vous que cette classe existe
+$productModel = new Product(); // Assurez-vous que cette classe existe
 $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 
 $products = $productModel->findPaginated($page, 5); // 5 produits par page
@@ -28,7 +30,6 @@ $totalProducts = $productModel->count(); // Méthode pour compter le total des p
 
 $totalPages = ceil($totalProducts / 5);
 
-// $user_id = $_SESSION['user']->getId();
 ?>
 
 <!doctype html>
@@ -46,8 +47,13 @@ $totalPages = ceil($totalProducts / 5);
     <body>
         <h1>Nos produits</h1>
         <button class="home-button">
-            <a href="../index.php">home</a>
+            <a href="/pwd/profile">Profile</a>
+        </button>
+        <button class="home-button">
             <a href="">Cart</a>
+        </button>
+        <button class="home-button">
+            <a href="/pwd/logout">Logout</a>
         </button>
         <table>
             <thead>
@@ -78,7 +84,7 @@ $totalPages = ceil($totalProducts / 5);
                     <td><?= htmlspecialchars($product['created_at'] ?? '') ?></td>
                     <td><?= htmlspecialchars($product['updated_at'] ?? '') ?></td>
                     <td>
-                        <form action="../src/Controller/ShopController.php" method="post">
+                        <form action="/pwd/shop" method="post">
                             <input type="hidden" name="form-name" value="show-product-form">
                             <input type="hidden" name="id_product" value="<?= $product['id'] ?>">
                             <input type="hidden" name="product_type" value="<?php if ($product['category_id'] == 1){echo 'clothing';}  else{echo 'electronic';} ?>">
@@ -86,7 +92,7 @@ $totalPages = ceil($totalProducts / 5);
                         </form>
                     </td>
                     <td>
-                        <form action="../src/Controller/CartController.php" method="post">
+                        <form action="/pwd/cart" method="post">
                             <input type="hidden" name="form-name" value="add-cart-form">
                             <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
                             <button type="submit">Ajouter</button>

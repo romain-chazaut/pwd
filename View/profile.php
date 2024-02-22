@@ -38,7 +38,7 @@ if (isset($_SESSION['user'])) {
     <body>
         <h1>Profile</h1>
 
-        <form action="../src/Controller/AuthenticationController.php" method="post" class="profile-form" name="profile-form">
+        <form action="/pwd/profile" method="post" class="profile-form" name="profile-form">
             <input type="hidden" name="form-name" value="profile-form">
 
             <label for="fullname">Fullname</label>
@@ -68,7 +68,7 @@ if (isset($_SESSION['user'])) {
         <?php } ?>
 
         <button class="home-button">
-            <a href="../index.php">Home</a>
+            <a href="/pwd/shop">Shop</a>
         </button>
     </body>
 </html>

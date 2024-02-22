@@ -1,8 +1,6 @@
 <?php
 namespace App\Controller;
 
-require_once '../../vendor/autoload.php';
-
 use Dotenv\Dotenv;
 use App\Model\User;
 
@@ -157,52 +155,4 @@ class AuthenticationController
             return false;
         }
     }
-}
-
-/**
- * Vérifie s'il y a une requête POST
- * Instancie un objet AuthenticationController
- * Appelle la méthode nécessaire en fonction de la valeur de $_POST['form-name']
- */
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $authentication = new AuthenticationController();
-
-    if (isset($_POST['form-name']) && $_POST['form-name'] === 'register-form') {
-        $fullname = htmlspecialchars($_POST['fullname']);
-        $email = htmlspecialchars($_POST['email']);
-        $password = htmlspecialchars($_POST['password']);
-        $confirmPassword = htmlspecialchars($_POST["confirm-password"]);
-
-        if ($authentication->register($fullname, $email, $password, $confirmPassword)) {
-            header("Location: ../../View/login.php");
-        }else {
-            header("Location: ../../View/register.php");
-        }
-        exit;
-    }
-
-
-    if (isset($_POST['form-name']) && $_POST['form-name'] === 'login-form') {
-        $email = htmlspecialchars($_POST['email']);
-        $password = htmlspecialchars($_POST['password']);
-
-        if ($authentication->login($email, $password)) {
-            header("Location: ../../index.php");
-        }else {
-            header("Location: ../../View/login.php");
-        }
-        exit;
-    }
-
-    if (isset($_POST['form-name']) && $_POST['form-name'] === 'profile-form') {
-        $fullname = htmlspecialchars($_POST['fullname']);
-        $email = htmlspecialchars($_POST['email']);
-        $password = htmlspecialchars($_POST['password']);
-        $confirmPassword = htmlspecialchars($_POST["confirm-password"]);
-
-        $authentication->updateProfile($fullname, $email, $password, $confirmPassword);
-        header("Location: ../../View/profile.php");
-        exit;
-    }
-
 }

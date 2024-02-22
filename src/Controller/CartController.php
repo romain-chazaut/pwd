@@ -8,6 +8,7 @@ use App\Model\Electronic;
 use App\Model\Cart;
 use App\Model\User;
 use Dotenv\Dotenv;
+use Exception;
 
 $dotenv = Dotenv::createImmutable(__DIR__.'/../../');
 $dotenv->load();
@@ -34,6 +35,7 @@ class CartController
      *
      * @param int $product_id
      * @return bool
+     * @throws Exception
      */
     public function addProductToCart(int $product_id): bool
     {
@@ -72,24 +74,4 @@ class CartController
         }
     }
 
-}
-
-/**
- * Vérifie s'il y a une requête POST
- * Instancie un objet CartController
- * Appelle la méthode nécessaire en fonction de la valeur de $_POST['form-name']
- */
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $cart = new CartController();
-
-    if (isset($_POST['form-name']) && $_POST['form-name'] === 'add-cart-form') {
-        $product_id = htmlspecialchars($_POST['product_id']);
-
-        if ($cart->addProductToCart($product_id)) {
-            $_SESSION['success'] = "Produit ajouté au panier avec succès";
-        } else {
-            $_SESSION['error'] = "Erreur lors de l'ajout du produit au panier";
-        }
-        header('Location: ../../View/shop.php');
-    }
 }
