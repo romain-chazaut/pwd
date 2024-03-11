@@ -195,6 +195,27 @@ class User
     }
 
     /**
+     * Supprime l'utilisateur dans la base de données
+     *
+     * @param int $id
+     * @return string
+     */
+    public function remove(int $id): string
+    {
+        $pdo = new \PDO('mysql:host=' . $_ENV['DB_HOST'] . ';dbname=' . $_ENV['DB_NAME'] . ';port=' . $_ENV['DB_PORT'], $_ENV['DB_USER'], $_ENV['DB_PASSWORD']);
+
+        $stmt = $pdo->prepare("DELETE FROM user WHERE id = :id");
+        $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
+        $result = $stmt->execute();
+
+        if ($result === false) {
+            return "Echec lors de la suppression de l'utilisateur";
+        }else {
+            return "L'utilisateur à bien été supprimer";
+        }
+    }
+
+    /**
      * Récupère l'id d'un utilisateur avec son email
      *
      * @param string $email

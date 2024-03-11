@@ -216,4 +216,18 @@ class Electronic extends AbstractProduct implements StockableInterface
         return $this;
     }
 
+    public function remove(int $id): string
+    {
+        $pdo = new \PDO('mysql:host=' . $_ENV['DB_HOST'] . ';dbname=' . $_ENV['DB_NAME'] . ';port=' . $_ENV['DB_PORT'], $_ENV['DB_USER'], $_ENV['DB_PASSWORD']);
+
+        $stmt = $pdo->prepare("DELETE FROM product WHERE id = :id");
+        $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
+        $result = $stmt->execute();
+
+        if ($result === false) {
+            return "Echec lors de la suppression du produit";
+        }else {
+            return "Le produit à bien été supprimer";
+        }
+    }
 }

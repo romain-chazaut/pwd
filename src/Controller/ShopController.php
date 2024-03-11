@@ -104,4 +104,36 @@ class ShopController
             return "Connectez-vous pour afficher les détails du produit";
         }
     }
+
+    /**
+     * Supprime un produit
+     *
+     * @param int $id_product
+     * @param string $product_type
+     * @return string|Electronic|Clothing
+     */
+    public function removeProduct(int $id_product, string $product_type): string|Electronic|Clothing
+    {
+        if (isset($_SESSION['user'])) {
+            $user = $_SESSION['user'];
+            if ($user->getState() == 1 && $user->getRole()[0]== 'ROLE_ADMIN') {
+                if ($product_type == 'electronic') {
+                    $electronic = new Electronic();
+                    return $electronic->remove($id_product);
+
+                } elseif ($product_type == 'clothing') {
+                    $clothing = new Clothing();
+                    return $clothing->remove($id_product);
+
+                } else {
+                    return 'Le produit n\'existe pas';
+
+                }
+            } else {
+                return "Vous n'êtes pas autorisé à supprimer un produit";
+            }
+        } else {
+            return "Vous n'êtes pas autorisé à supprimer un produit";
+        }
+    }
 }

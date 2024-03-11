@@ -18,11 +18,7 @@ $totalProducts = $productModel->count(); // Méthode pour compter le total des p
 
 $totalPages = ceil($totalProducts / 5);
 
-if (isset($_SESSION['user'])) {
-    if ($_SESSION['user']->getRole()[0] === 'ROLE_ADMIN') {
-        echo 'admin connecté';
-    }
-}
+var_dump($_SESSION['user']);
 ?>
 
 <!doctype html>
@@ -63,6 +59,16 @@ if (isset($_SESSION['user'])) {
             <?php }
         } ?>
 
+        <?php if (isset($_SESSION['user'])) {
+           if ($_SESSION['user']->getRole()[0] === 'ROLE_ADMIN'): ?>
+                <button class="home-button">
+                    <a href="/pwd/users">Utilisateurs</a>
+                </button>
+           <?php endif;
+        } ?>
+
+
+
         <table>
             <thead>
                 <tr>
@@ -77,6 +83,9 @@ if (isset($_SESSION['user'])) {
                     <th>Date de mise à jour</th>
                     <th>Afficher le produit</th>
                     <th>Ajouter au Panier</th>
+                    <?php if ($_SESSION['user']->getRole()[0] === 'ROLE_ADMIN'): ?>
+                        <th>Supprimer un produit</th>
+                    <?php endif; ?>
                 </tr>
             </thead>
             <tbody>
@@ -106,6 +115,17 @@ if (isset($_SESSION['user'])) {
                             <button type="submit">Ajouter</button>
                         </form>
                     </td>
+                    <?php if ($_SESSION['user']->getRole()[0] === 'ROLE_ADMIN'): ?>
+                        <td>
+                            <form action="/pwd/shop/remove" method="post">
+                                <input type="hidden" name="form-name" value="remove-product-form">
+                                <input type="hidden" name="id_product" value="<?= $product['id'] ?>">
+                                <input type="hidden" name="product_type" value="<?php if ($product['category_id'] == 1){echo 'clothing';}  else{echo 'electronic';} ?>">
+                                <button type="submit">Supprimer</button>
+
+                            </form>
+                        </td>
+                    <?php endif; ?>
                 </tr>
             <?php endforeach; ?>
             </tbody>
@@ -133,6 +153,11 @@ if (isset($_SESSION['user'])) {
         <?php if (isset($_SESSION['error'])): ?>
             <p><?= $_SESSION['error'] ?></p>
             <?php unset($_SESSION['error']); ?>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION['removeResponse'])): ?>
+            <p><?= $_SESSION['removeResponse'] ?></p>
+            <?php unset($_SESSION['removeResponse']); ?>
         <?php endif; ?>
 
         <div>

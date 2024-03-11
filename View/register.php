@@ -14,7 +14,7 @@ if (session_status() === PHP_SESSION_NONE) {
 if (isset($_SESSION['user'])) {
     $user = $_SESSION['user'];
     if ($user->getState() == 1) {
-        header('Location: ../index.php');
+        header('Location: /pwd');
         exit();
     }
 }
