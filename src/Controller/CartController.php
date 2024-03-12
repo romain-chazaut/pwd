@@ -72,4 +72,23 @@ class CartController
         }
     }
 
+    public function updateQuantity(int $product_id, int $cart_id, int $quantity): bool
+    {
+        $cart = new Cart();
+        if ($cart->updateQuantity($product_id, $cart_id, $quantity)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function deleteProduct(int $product_id, int $cart_id): bool
+    {
+        $cart = new Cart();
+        if ($cart->removeProductFromCart($product_id, $cart_id)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

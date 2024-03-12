@@ -18,49 +18,22 @@ $router = new AltoRouter();
 
 $router->setBasePath('/pwd');
 
-// Routes en GET
 $router->map('GET', '/', function () {
-    header('Location: View/shop.php');
+    include_once 'View/shop.php';
     exit();
 });
 
 $router->map('GET', '/login', function () {
-    header('Location: View/login.php');
-    exit();
-});
-
-$router->map('GET', '/register', function () {
-    header('Location: View/register.php');
+    include_once 'View/login.php';
     exit();
 });
 
 $router->map('GET', '/logout', function () {
-    header('Location: View/logout.php');
+    include_once 'View/logout.php';
     exit();
 });
 
-$router->map('GET', '/shop', function () {
-    header('Location: View/shop.php');
-    exit();
-});
-
-$router->map('GET', '/profile', function () {
-    header('Location: View/profile.php');
-    exit();
-});
-
-$router->map('GET', '/users', function () {
-    header('Location: View/users.php');
-    exit();
-});
-
-
-// Routes en POST
 $router->map('POST', '/login', function () {
-    /**
-     * Vérifie s'il y a une requête POST
-     * Instancie un objet AuthenticationController
-     */
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['form-name']) && $_POST['form-name'] === 'login-form') {
             $authentication = new AuthenticationController();
@@ -68,20 +41,21 @@ $router->map('POST', '/login', function () {
             $password = htmlspecialchars($_POST['password']);
 
             if ($authentication->login($email, $password)) {
-                header("Location: View/shop.php");
+                header("Location: /pwd/shop");
             } else {
-                header("Location: View/login.php");
+                header("Location: /pwd/login");
             }
-            exit;
+            exit();
         }
     }
 });
 
+$router->map('GET', '/register', function () {
+    include_once 'View/register.php';
+    exit();
+});
+
 $router->map('POST', '/register', function () {
-    /**
-     * Vérifie s'il y a une requête POST
-     * Instancie un objet AuthenticationController
-     */
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['form-name']) && $_POST['form-name'] === 'register-form') {
             $authentication = new AuthenticationController();
@@ -91,61 +65,21 @@ $router->map('POST', '/register', function () {
             $confirmPassword = filter_input(INPUT_POST, 'confirm-password', FILTER_SANITIZE_STRING);
 
             if ($authentication->register($fullname, $email, $password, $confirmPassword)) {
-                header("Location: View/login.php");
+                header("Location: /pwd/login");
             } else {
-                header("Location: View/register.php");
+                header("Location: /pwd/register");
             }
-            exit;
-        }
-    }
-});
-
-$router->map('POST', '/profile', function () {
-    /**
-     * Vérifie s'il y a une requête POST
-     * Instancie un objet AuthenticationController
-     */
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        if (isset($_POST['form-name']) && $_POST['form-name'] === 'profile-form') {
-            $authentication = new AuthenticationController();
-            $fullname = htmlspecialchars($_POST['fullname']);
-            $email = htmlspecialchars($_POST['email']);
-            $password = htmlspecialchars($_POST['password']);
-            $confirmPassword = htmlspecialchars($_POST["confirm-password"]);
-
-            $authentication->updateProfile($fullname, $email, $password, $confirmPassword);
-            header("Location: View/profile.php");
-            exit;
-        }
-    }
-});
-
-$router->map('POST', '/user/remove', function () {
-    /**
-     * Vérifie s'il y a une requête POST
-     * Instancie un objet AuthenticationController
-     */
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        if (isset($_POST['form-name']) && $_POST['form-name'] === 'remove-user-form') {
-            $admin = new AdminController();
-            $id_product = htmlspecialchars($_POST['id_product']);
-
-            $removeResponse = $admin->removeUser($id_product);
-            $_SESSION['removeResponse'] = $removeResponse;
-
-            header('Location: /pwd/users');
             exit();
         }
     }
 });
 
+$router->map('GET', '/shop', function () {
+    include_once 'View/shop.php';
+    exit();
+});
 
-
-$router->map('POST', '/shop', function () {
-    /**
-     * Vérifie s'il y a une requête POST
-     * Instancie un objet ShopController
-     */
+$router->map('POST', '/shop/product', function () {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['form-name']) && $_POST['form-name'] === 'show-product-form') {
             $shop = new ShopController(new Product());
@@ -158,23 +92,18 @@ $router->map('POST', '/shop', function () {
             } else {
                 $_SESSION['error'] = $product;
             }
-            header('Location: View/shop.php');
+            header('Location: /pwd/shop');
             exit();
         }
     }
 });
 
 $router->map('POST', '/shop/remove', function () {
-    /**
-     * Vérifie s'il y a une requête POST
-     * Instancie un objet ShopController
-     */
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['form-name']) && $_POST['form-name'] === 'remove-product-form') {
             $shop = new ShopController(new Product());
             $id_product = htmlspecialchars($_POST['id_product']);
             $product_type = htmlspecialchars($_POST['product_type']);
-
 
             $removeResponse = $shop->removeProduct($id_product, $product_type);
             $_SESSION['removeResponse'] = $removeResponse;
@@ -185,11 +114,12 @@ $router->map('POST', '/shop/remove', function () {
     }
 });
 
-$router->map('POST', '/cart', function () {
-    /**
-     * Vérifie s'il y a une requête POST
-     * Instancie un objet CartController
-     */
+$router->map('GET', '/cart', function () {
+    include_once 'View/cart.php';
+    exit();
+});
+
+$router->map('POST', '/cart/add', function () {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['form-name']) && $_POST['form-name'] === 'add-cart-form') {
             $cart = new CartController();
@@ -207,18 +137,101 @@ $router->map('POST', '/cart', function () {
                     }
                 }
             }
-            header('Location: View/shop.php');
+            header('Location: /pwd/shop');
             exit();
         }
     }
 });
 
-// Correspondance et exécution de la route
+$router->map('POST', '/cart/edit', function () {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (isset($_POST['form-name']) && $_POST['form-name'] === 'edit-cart-product_quantity-form') {
+            $cart = new CartController();
+            $product_id = htmlspecialchars($_POST['product_id']);
+            $cart_id = htmlspecialchars($_POST['cart_id']);
+            $quantity = htmlspecialchars($_POST['quantity']);
+
+            if ($cart->updateQuantity($product_id, $cart_id, $quantity)) {
+                $_SESSION['updateResponse'] = "Quantité modifiée avec succès";
+            } else {
+                $_SESSION['updateResponse'] = "Erreur lors de la modification de la quantité";
+            }
+
+            header('Location: /pwd/cart');
+            exit();
+        }
+    }
+});
+
+$router->map('POST', '/cart/remove', function () {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (isset($_POST['form-name']) && $_POST['form-name'] === 'remove-cart-product-form') {
+            $cart = new CartController();
+            $product_id = htmlspecialchars($_POST['product_id']);
+            $cart_id = htmlspecialchars($_POST['cart_id']);
+
+            if ($cart->deleteProduct($product_id, $cart_id)) {
+                $_SESSION['removeResponse'] = "Produit supprimé avec succès";
+            } else {
+                $_SESSION['removeResponse'] = "Erreur lors de la suppression du produit";
+            }
+
+            header('Location: /pwd/cart');
+            exit();
+        }
+    }
+});
+
+$router->map('GET', '/user/profile', function () {
+    include_once 'View/profile.php';
+    exit();
+});
+
+$router->map('POST', '/user/profile/edit', function () {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (isset($_POST['form-name']) && $_POST['form-name'] === 'profile-form') {
+            $authentication = new AuthenticationController();
+            $fullname = htmlspecialchars($_POST['fullname']);
+            $email = htmlspecialchars($_POST['email']);
+            $password = htmlspecialchars($_POST['password']);
+            $confirmPassword = htmlspecialchars($_POST["confirm-password"]);
+
+            $authentication->updateProfile($fullname, $email, $password, $confirmPassword);
+            header("Location: /pwd/user/profile");
+            exit();
+        }
+    }
+});
+
+$router->map('GET', '/admin/users', function () {
+    include_once 'View/admin/users.php';
+    exit();
+});
+
+$router->map('POST', '/admin/user/remove', function () {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (isset($_POST['form-name']) && $_POST['form-name'] === 'remove-user-form') {
+            $admin = new AdminController();
+            $id_product = htmlspecialchars($_POST['id_product']);
+
+            $removeResponse = $admin->removeUser($id_product);
+            $_SESSION['removeResponse'] = $removeResponse;
+
+            header('Location: /pwd/admin/users');
+            exit();
+        }
+    }
+});
+
 $match = $router->match();
 
-if(is_array($match) && is_callable($match['target'])) {
-    call_user_func_array($match['target'], $match['params']); 
+if (is_array($match) && is_callable($match['target'])) {
+    call_user_func_array($match['target'], $match['params']);
 } else {
     header($_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
     echo "404 Not Found";
 }
+
+
+
+

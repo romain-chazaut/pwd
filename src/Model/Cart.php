@@ -64,6 +64,57 @@ class Cart
         return false;
     }
 
+    public function getProductsByCartId(int $cart_id): array
+    {
+        $pdo = new \PDO('mysql:host=' . $_ENV['DB_HOST'] . ';dbname=' . $_ENV['DB_NAME'] . ';port=' . $_ENV['DB_PORT'], $_ENV['DB_USER'], $_ENV['DB_PASSWORD']);
+        $stmt = $pdo->prepare('SELECT * FROM product_cart WHERE cart_id = :cart_id');
+        $stmt->bindValue(':cart_id', $cart_id, \PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function getCartProductQuantity(int $product_id, int $cart_id): int
+    {
+        $pdo = new \PDO('mysql:host=' . $_ENV['DB_HOST'] . ';dbname=' . $_ENV['DB_NAME'] . ';port=' . $_ENV['DB_PORT'], $_ENV['DB_USER'], $_ENV['DB_PASSWORD']);
+
+        $stmt = $pdo->prepare("SELECT quantity FROM product_cart WHERE product_id = :product_id AND cart_id = :cart_id");
+        $stmt->bindValue(':product_id', $product_id, \PDO::PARAM_INT); // Supposons que product_id soit un entier
+        $stmt->bindValue(':cart_id', $cart_id, \PDO::PARAM_INT);
+        $stmt->execute();
+
+        $result = $stmt->fetchColumn();
+
+        if ($result === false) {
+            return false;
+        } else {
+            return $result;
+        }
+
+    }
+
+    public function getPriceByCartId(int $cart_id): float
+    {
+        $products = $this->getProductsByCartId($cart_id);
+        $price = 0;
+
+        foreach ($products as $product) {
+            $product_id = $product['product_id'];
+            $product = $this->getProductById($product_id);
+            if ($this->getCartProductQuantity($product_id, $cart_id) > 1) {
+                $price += $product['price'] * $this->getCartProductQuantity($product_id, $cart_id);
+            } else {
+                $price += $product['price'];
+            }
+        }
+
+        $this->setPrice($price);
+        $this->update();
+
+        return $price;
+    }
+
+
+
     /**
      * Récupère la catégorie d'un produit en fonction de son id
      *
@@ -84,6 +135,21 @@ class Cart
             return false;
         }
         return $result['category_id'];
+    }
+
+    /**
+     * Récupère un produit en fonction de son id
+     *
+     * @param int $product_id
+     * @return array
+     */
+    public function getProductById(int $product_id): array
+    {
+        $pdo = new \PDO('mysql:host=' . $_ENV['DB_HOST'] . ';dbname=' . $_ENV['DB_NAME'] . ';port=' . $_ENV['DB_PORT'], $_ENV['DB_USER'], $_ENV['DB_PASSWORD']);
+        $stmt = $pdo->prepare('SELECT * FROM product WHERE id = :id');
+        $stmt->bindValue(':id', $product_id, \PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
     /**
@@ -133,6 +199,25 @@ class Cart
         }
     }
 
+    public function updateQuantity(int $product_id, int $cart_id, int $quantity): bool
+    {
+        try {
+            $pdo = new \PDO('mysql:host=' . $_ENV['DB_HOST'] . ';dbname=' . $_ENV['DB_NAME'] . ';port=' . $_ENV['DB_PORT'], $_ENV['DB_USER'], $_ENV['DB_PASSWORD']);
+
+            $stmt = $pdo->prepare("UPDATE product_cart SET quantity = :quantity WHERE product_id = :product_id AND cart_id = :cart_id");
+            $stmt->bindValue(':quantity', $quantity, \PDO::PARAM_INT);
+            $stmt->bindValue(':product_id', $product_id, \PDO::PARAM_INT);
+            $stmt->bindValue(':cart_id', $cart_id, \PDO::PARAM_INT);
+            $stmt->execute();
+
+            return true; // Succès de l'opération de mise à jour
+        } catch (\PDOException $e) {
+            // En cas d'erreur, affichage du message d'erreur
+            echo "Erreur : " . $e->getMessage();
+            return false; // Échec de l'opération de mise à jour
+        }
+    }
+
     /**
      * Ajoute un produit au panier
      *
@@ -158,6 +243,26 @@ class Cart
             return false; // Échec de l'opération d'insertion
         }
     }
+
+    public function removeProductFromCart(int $product_id, int $cart_id): bool
+    {
+        try {
+            $pdo = new \PDO('mysql:host=' . $_ENV['DB_HOST'] . ';dbname=' . $_ENV['DB_NAME'] . ';port=' . $_ENV['DB_PORT'], $_ENV['DB_USER'], $_ENV['DB_PASSWORD']);
+
+            $stmt = $pdo->prepare("DELETE FROM product_cart WHERE product_id = :product_id AND cart_id = :cart_id");
+            $stmt->bindValue(':product_id', $product_id, \PDO::PARAM_INT);
+            $stmt->bindValue(':cart_id', $cart_id, \PDO::PARAM_INT);
+            $stmt->execute();
+
+            return true; // Succès de l'opération de suppression
+        } catch (\PDOException $e) {
+            // En cas d'erreur, affichage du message d'erreur
+            echo "Erreur : " . $e->getMessage();
+            return false; // Échec de l'opération de suppression
+        }
+    }
+
+
 
     public function getId(): int|null
     {

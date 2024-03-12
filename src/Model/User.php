@@ -237,6 +237,39 @@ class User
         }
     }
 
+    public function getCart(): array
+    {
+        $cart = new Cart();
+        $cart_id = $cart->findOneByUserId($this->getId())->getId();
+
+        if ($cart_id === false) {
+            return [];
+        }
+
+        $products = $cart->getProductsByCartId($cart_id);
+        $products_tab = [];
+
+        foreach ($products as $product) {
+            $product_id = $product['product_id'];
+            $product = $cart->getProductById($product_id);
+            $products_tab[] = $product;
+        }
+
+        return $products_tab;
+    }
+
+    public function getCartPrice(): float
+    {
+        $cart = new Cart();
+        $cart_id = $cart->findOneByUserId($this->getId())->getId();
+
+        if ($cart_id === false) {
+            return 0;
+        }
+
+        return $cart->getPriceByCartId($cart_id);
+    }
+
     public function getId(): ?int
     {
         return $this->id;

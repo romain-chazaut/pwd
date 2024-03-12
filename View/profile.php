@@ -1,13 +1,4 @@
 <?php
-require_once '../vendor/autoload.php';
-
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/../');
-$dotenv->load();
-
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
 /**
  * Redirige l'utilisateur vers la page de connexion s'il n'est pas connecté
  */
@@ -15,12 +6,10 @@ if (isset($_SESSION['user'])) {
     $user = $_SESSION['user'];
     if ($user->getState() == 0 || $user->getState() == '') {
         $_SESSION['error'] = "Connectez-vous pour accéder au profil";
-        header('Location: login.php');
+        header('Location: /pwd/login');
         exit();
     }
 }
-
-var_dump($_SESSION['user'])
 ?>
 
 <!doctype html>
